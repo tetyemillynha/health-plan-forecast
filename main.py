@@ -28,21 +28,39 @@ df.isnull().sum()
 # Distribuição por região
 print("---- Distribuição por região")
 print(df.groupby('regiao')['encargos'].describe())
-print(df.groupby('regiao')['encargos'].mean())
 
 # Distribuição por idade
 print("---- Distribuição por idade")
 print(df.groupby('idade')['encargos'].describe())
-print(df.groupby('idade')['encargos'].mean())
 
 # Distribuição por sexo
 print("---- Distribuição por sexo")
 print(df.groupby('sexo')['encargos'].describe())
-print(df.groupby('sexo')['encargos'].mean())
 
 # Distribuição por fumante
 print("---- Distribuição por fumante")
 print(df.groupby('fumante')['encargos'].describe())
-print(df.groupby('fumante')['encargos'].mean())
+
+#Distribuição por sexo / fumante
+print("---- Distribuição por sexo / fumante")
+print(df.groupby(['sexo', 'fumante'])['encargos'].describe())
+
+#Distribuição por sexo / idade
+print("---- Distribuição por sexo / idade")
+print(df.groupby(['sexo', 'idade'])['encargos'].describe())
+
+#Distribuição por idade / fumante
+print("---- Distribuição por idade / fumante")
+print(df.groupby(['idade', 'fumante'])['encargos'].describe())
+
+#Distribuição por sexo / regiao
+print("---- Distribuição por sexo / regiao")
+print(df.groupby(['sexo', 'regiao'])['encargos'].describe())
+
+#Distribuição por idade / regiao
+print("---- Distribuição por idade / regiao")
+print(df.groupby(['idade', 'regiao'])['encargos'].describe())
+
+
 
 # Boxplot por região
