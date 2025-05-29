@@ -25,5 +25,24 @@ df.isnull().sum()
 
 # Vizualização de distribuições relevantes.
 
-# Histograma por região
+# Distribuição por região
+print("---- Distribuição por região")
+print(df.groupby('regiao')['encargos'].describe())
 print(df.groupby('regiao')['encargos'].mean())
+
+# Distribuição por idade
+print("---- Distribuição por idade")
+print(df.groupby('idade')['encargos'].describe())
+print(df.groupby('idade')['encargos'].mean())
+
+# Distribuição por sexo
+print("---- Distribuição por sexo")
+print(df.groupby('sexo')['encargos'].describe())
+print(df.groupby('sexo')['encargos'].mean())
+
+# Distribuição por fumante
+print("---- Distribuição por fumante")
+print(df.groupby('fumante')['encargos'].describe())
+print(df.groupby('fumante')['encargos'].mean())
+
+# Boxplot por região
