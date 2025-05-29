@@ -116,8 +116,20 @@ df = df[df['sexo'].isin(['Masculino', 'Feminino'])]
 df = df[df['fumante'].isin(['Sim', 'Não'])]
 df = df[(df['idade'] >= 0) & (df['idade'] <= 130)]
 
+print(df.head())
 
-# Converta variáveis categóricas em formatos adequados para modelagem
+# Converta variáveis categóricas em formatos numéricos adequados para modelagem
+print("---- Converta variáveis categóricas em formatos numéricos adequados para modelagem")
+df_encoded = pd.get_dummies(df, columns=['sexo', 'fumante', 'regiao'], drop_first=True) #prevenindo multicolinearidade
+
+X = df_encoded.drop('encargos', axis=1)
+y = df_encoded['encargos']
+
+
+
+
+
+
 
 
 
