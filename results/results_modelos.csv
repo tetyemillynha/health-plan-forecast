@@ -1,4 +1,4 @@
 Modelo,R2 (teste unico),R2 (teste cruzado),Desvio padrão
-Regressão Linear,0.9825,0.9817,0.0007
+Regressão Linear,0.9817,0.9816,0.0006
 Árvore de Decisão,0.9989,0.9989,0.0001
 Random Forest,0.9996,0.9996,0.0

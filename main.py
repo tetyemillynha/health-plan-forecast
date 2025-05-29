@@ -109,6 +109,16 @@ plt.ylabel('Encargos')
 plt.savefig('graphs/encargos_por_fumante.png', bbox_inches='tight')
 plt.close()
 
+# Gráfico de dispersão - Encargos vs IMC por Status de Fumante
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x='imc', y='encargos', hue='fumante', data=df)
+plt.title('Encargos vs IMC por Status de Fumante')
+plt.xlabel('IMC')
+plt.ylabel('Encargos')
+plt.tight_layout()
+plt.savefig('graphs/imc_vs_encargos_fumante.png')
+plt.close()
+
 #Pré processamento dos dados
 print("---- Pré processamento dos dados")
 
@@ -122,6 +132,7 @@ df = df.dropna()
 df = df[df['sexo'].isin(['Masculino', 'Feminino'])]
 df = df[df['fumante'].isin(['Sim', 'Não'])]
 df = df[(df['idade'] >= 0) & (df['idade'] <= 130)]
+df = df[(df['imc'] >= 10) & (df['imc'] <= 60)]
 
 print(df.head())
 
@@ -147,7 +158,7 @@ r2_linearRegression = r2_score(y_test, y_pred)
 
 print("---- Avalia o modelo de Regressão Linear")
 print(f"MSE: {mse_linearRegression}")
-print(f"MAE: {mae_linearRegression}")
+print(f"MAE: R$ {round(mae_linearRegression, 2)}")
 print(f"R2: {r2_linearRegression}")
 
 # Cria e treina o modelo de árvore de decisão
@@ -162,7 +173,7 @@ r2_decisionTree = r2_score(y_test, y_pred_decisionTree)
 
 print("---- Avalia o modelo de Árvore de Decisão")
 print(f"MSE: {mse_decisionTree}")
-print(f"MAE: {mae_decisionTree}")
+print(f"MAE: R$ {round(mae_decisionTree, 2)}")
 print(f"R2: {r2_decisionTree}")
 
 # Cria e treina o modelo de Random Forest
@@ -177,7 +188,7 @@ r2_randomForest = r2_score(y_test, y_pred_randomForest)
 
 print("---- Avalia o modelo de Random Forest")
 print(f"MSE: {mse_randomForest}")
-print(f"MAE: {mae_randomForest}")
+print(f"MAE: R$ {round(mae_randomForest, 2)}")
 print(f"R2: {r2_randomForest}")
 
 # Faz validação cruzada para comparar os modelos
@@ -209,6 +220,46 @@ df_results = pd.DataFrame({
 print("---- Resultados dos modelos")
 print(df_results.to_string(index=False));
 df_results.to_csv('results/results_modelos.csv', index=False)
+
+
+
+# Gráfico de barras - R²
+model_names = ['Regressão Linear', 'Árvore de Decisão', 'Random Forest']
+r2_teste = [r2_linearRegression, r2_decisionTree, r2_randomForest]
+r2_cv = [np.mean(scores_linearRegression), np.mean(scores_decisionTree), np.mean(scores_randomForest)]
+
+x = np.arange(len(model_names))
+width = 0.35
+
+plt.figure(figsize=(10, 6))
+plt.bar(x - width/2, r2_teste, width, label='Teste')
+plt.bar(x + width/2, r2_cv, width, label='Validação Cruzada')
+plt.ylim(0.95, 1.01)
+plt.ylabel('R²')
+plt.title('Comparação do R² dos Modelos')
+plt.xticks(x, model_names)
+plt.legend()
+plt.tight_layout()
+plt.savefig('graphs/r2_comparacao_modelos.png')
+plt.close()
+
+
+#  Gráfico real vs previsto
+def plot_real_vs_previsto(y_test, y_pred, nome_modelo, filename):
+    plt.figure(figsize=(8, 6))
+    sns.scatterplot(x=y_test, y=y_pred, alpha=0.5)
+    plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
+    plt.xlabel('Valor Real')
+    plt.ylabel('Valor Previsto')
+    plt.title(f'Real vs Previsto - {nome_modelo}')
+    plt.tight_layout()
+    plt.savefig(f'graphs/{filename}')
+    plt.close()
+
+# Aplica para cada modelo
+plot_real_vs_previsto(y_test, y_pred, "Regressão Linear", "real_vs_previsto_lr.png")
+plot_real_vs_previsto(y_test, y_pred_decisionTree, "Árvore de Decisão", "real_vs_previsto_dt.png")
+plot_real_vs_previsto(y_test, y_pred_randomForest, "Random Forest", "real_vs_previsto_rf.png")
 
 
 
