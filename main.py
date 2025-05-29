@@ -102,3 +102,24 @@ plt.ylabel('Encargos')
 plt.savefig('graphs/encargos_por_fumante.png', bbox_inches='tight')
 plt.close()
 
+#Pré processamento dos dados
+print("---- Pré processamento dos dados")
+
+#padroniza os valores para fumante e sexo e idade
+df['fumante'] = df['fumante'].str.strip().str.capitalize()
+df['sexo'] = df['sexo'].str.strip().str.capitalize()
+df['idade'] = pd.to_numeric(df['idade'], errors='coerce')
+
+# Remove os dados inválidos
+df = df.dropna()
+df = df[df['sexo'].isin(['Masculino', 'Feminino'])]
+df = df[df['fumante'].isin(['Sim', 'Não'])]
+df = df[(df['idade'] >= 0) & (df['idade'] <= 130)]
+
+
+# Converta variáveis categóricas em formatos adequados para modelagem
+
+
+
+
+
