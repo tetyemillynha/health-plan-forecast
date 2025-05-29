@@ -129,8 +129,24 @@ df_encoded = pd.get_dummies(df, columns=['sexo', 'fumante', 'regiao'], drop_firs
 X = df_encoded.drop('encargos', axis=1)
 y = df_encoded['encargos']
 
+# Divide os dados em conjuntos de treinamento e teste (80 / 20)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+# Cria e treina o modelo de regressão linear
+model_linearRegression = LinearRegression()
+model_linearRegression.fit(X_train, y_train)
+## Faz previsões
+y_pred = model_linearRegression.predict(X_test)
 
+# Avalia o modelo
+mse_linearRegression = mean_squared_error(y_test, y_pred)
+mae_linearRegression = mean_absolute_error(y_test, y_pred)
+r2_linearRegression = r2_score(y_test, y_pred)
+
+print("---- Avalia o modelo de Regressão Linear")
+print(f"MSE: {mse_linearRegression}")
+print(f"MAE: {mae_linearRegression}")
+print(f"R2: {r2_linearRegression}")
 
 
 
