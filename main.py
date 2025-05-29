@@ -24,14 +24,9 @@ df.isnull().sum()
 
 
 # Vizualização de distribuições relevantes.
-
 # Distribuição por região
 print("---- Distribuição por região")
 print(df.groupby('regiao')['encargos'].describe())
-
-# Distribuição por idade
-print("---- Distribuição por idade")
-print(df.groupby('idade')['encargos'].describe())
 
 # Distribuição por sexo
 print("---- Distribuição por sexo")
@@ -44,14 +39,6 @@ print(df.groupby('fumante')['encargos'].describe())
 #Distribuição por sexo / fumante
 print("---- Distribuição por sexo / fumante")
 print(df.groupby(['sexo', 'fumante'])['encargos'].describe())
-
-#Distribuição por sexo / idade
-print("---- Distribuição por sexo / idade")
-print(df.groupby(['sexo', 'idade'])['encargos'].describe())
-
-#Distribuição por idade / fumante
-print("---- Distribuição por idade / fumante")
-print(df.groupby(['idade', 'fumante'])['encargos'].describe())
 
 #Distribuição por sexo / regiao
 print("---- Distribuição por sexo / regiao")
