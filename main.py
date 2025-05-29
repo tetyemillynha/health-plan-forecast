@@ -49,5 +49,21 @@ print("---- Distribuição por idade / regiao")
 print(df.groupby(['idade', 'regiao'])['encargos'].describe())
 
 
+#medias e contagens para todas as colunas
+print(df.groupby('regiao').agg(
+    media_encargos=('encargos', 'mean'),
+    mediana_encargos=('encargos', 'median'),
+    contagem=('encargos', 'count')
+))
+print(df.groupby('fumante').agg(
+    media_imc=('imc', 'mean'),
+    media_encargos=('encargos', 'mean'),
+    contagem=('encargos', 'count')
+))
+print(df.groupby('sexo').agg(
+    media_imc=('imc', 'mean'),
+    media_encargos=('encargos', 'mean'),
+    contagem=('encargos', 'count')
+))
 
-# Boxplot por região
+#percebe-se até aqui que os encargos são maiores para os fumantes e para as mulheres
