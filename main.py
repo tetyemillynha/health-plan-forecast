@@ -1,4 +1,9 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+
+os.makedirs('graphs', exist_ok=True)
 
 # Carregue a base de dados e explore suas características;
 df = pd.read_csv('database/insurance_brasil_simulado.csv')
@@ -66,4 +71,34 @@ print(df.groupby('sexo').agg(
     contagem=('encargos', 'count')
 ))
 
-#percebe-se até aqui que os encargos são maiores para os fumantes e para as mulheres
+# Percebe-se até aqui que os encargos são maiores para os fumantes e para as mulheres
+# E que as regiões sul e sudeste apresentam maiores encargos
+
+#Geração de gráficos para melhor visualização dos dados
+# Encargos por região
+plt.figure(figsize=(10, 6))
+sns.barplot(x='regiao', y='encargos', hue='regiao', data=df) #barras
+plt.title('Encargos por Região')
+plt.xlabel('Região')
+plt.ylabel('Encargos')
+plt.savefig('graphs/encargos_por_regiao.png', bbox_inches='tight')
+plt.close()
+
+# Encargos por sexo
+plt.figure(figsize=(10, 6))
+sns.barplot(x='sexo', y='encargos', hue='sexo', data=df)
+plt.title('Encargos por Sexo')
+plt.xlabel('Sexo')
+plt.ylabel('Encargos')
+plt.savefig('graphs/encargos_por_sexo.png', bbox_inches='tight')
+plt.close()
+
+# Encargos por fumante
+plt.figure(figsize=(10, 6))
+sns.barplot(x='fumante', y='encargos', hue='fumante', data=df)
+plt.title('Encargos por Fumante')
+plt.xlabel('Fumante')
+plt.ylabel('Encargos')
+plt.savefig('graphs/encargos_por_fumante.png', bbox_inches='tight')
+plt.close()
+
