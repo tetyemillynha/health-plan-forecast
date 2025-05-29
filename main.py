@@ -6,6 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
 import numpy as np
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import KFold, cross_val_score
 
 os.makedirs('graphs', exist_ok=True)
 
@@ -137,7 +140,6 @@ model_linearRegression = LinearRegression()
 model_linearRegression.fit(X_train, y_train)
 ## Faz previsões
 y_pred = model_linearRegression.predict(X_test)
-
 # Avalia o modelo
 mse_linearRegression = mean_squared_error(y_test, y_pred)
 mae_linearRegression = mean_absolute_error(y_test, y_pred)
@@ -147,6 +149,70 @@ print("---- Avalia o modelo de Regressão Linear")
 print(f"MSE: {mse_linearRegression}")
 print(f"MAE: {mae_linearRegression}")
 print(f"R2: {r2_linearRegression}")
+
+# Cria e treina o modelo de árvore de decisão
+model_decisionTree = DecisionTreeRegressor()
+model_decisionTree.fit(X_train, y_train)
+## Faz previsões
+y_pred_decisionTree = model_decisionTree.predict(X_test)
+# Avalia o modelo
+mse_decisionTree = mean_squared_error(y_test, y_pred_decisionTree)
+mae_decisionTree = mean_absolute_error(y_test, y_pred_decisionTree)
+r2_decisionTree = r2_score(y_test, y_pred_decisionTree)
+
+print("---- Avalia o modelo de Árvore de Decisão")
+print(f"MSE: {mse_decisionTree}")
+print(f"MAE: {mae_decisionTree}")
+print(f"R2: {r2_decisionTree}")
+
+# Cria e treina o modelo de Random Forest
+model_randomForest = RandomForestRegressor()
+model_randomForest.fit(X_train, y_train)
+## Faz previsões
+y_pred_randomForest = model_randomForest.predict(X_test)
+# Avalia o modelo
+mse_randomForest = mean_squared_error(y_test, y_pred_randomForest)
+mae_randomForest = mean_absolute_error(y_test, y_pred_randomForest)
+r2_randomForest = r2_score(y_test, y_pred_randomForest)
+
+print("---- Avalia o modelo de Random Forest")
+print(f"MSE: {mse_randomForest}")
+print(f"MAE: {mae_randomForest}")
+print(f"R2: {r2_randomForest}")
+
+# Faz validação cruzada para comparar os modelos
+print("---- Faz validação cruzada para comparar os modelos")
+kfold = KFold(n_splits=5, shuffle=True, random_state=42) #fazendo 5 folds
+
+scores_linearRegression = cross_val_score(model_linearRegression, X, y, cv=kfold, scoring='r2')
+scores_decisionTree = cross_val_score(model_decisionTree, X, y, cv=kfold, scoring='r2')
+scores_randomForest = cross_val_score(model_randomForest, X, y, cv=kfold, scoring='r2')
+
+print("---- Avaliação dos modelos")
+print(f"R2 - Regressão Linear: {scores_linearRegression.mean()}")
+print(f"R2 - Árvore de Decisão: {scores_decisionTree.mean()}")
+print(f"R2 - Random Forest: {scores_randomForest.mean()}")
+
+#monta tabela pra melhor visualização
+modal_names = ['Regressão Linear', 'Árvore de Decisão', 'Random Forest']
+r2_test = [r2_linearRegression, r2_decisionTree, r2_randomForest]
+r2_test_std = [np.std(scores_linearRegression), np.std(scores_decisionTree), np.std(scores_randomForest)]
+r2_test_mean = [np.mean(scores_linearRegression), np.mean(scores_decisionTree), np.mean(scores_randomForest)]
+
+df_results = pd.DataFrame({
+    'Modelo': modal_names,
+    'R2 (teste unico)': [round(x, 4) for x in r2_test],
+    'R2 (teste cruzado)': [round(x, 4) for x in r2_test_mean],
+    'Desvio padrão': [round(x, 4) for x in r2_test_std]
+})
+
+print("---- Resultados dos modelos")
+print(df_results.to_string(index=False));
+df_results.to_csv('results/results_modelos.csv', index=False)
+
+
+
+
 
 
 
