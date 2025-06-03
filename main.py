@@ -20,12 +20,14 @@ if language == "en":
     label_sex_female = "Female"
     label_smoker_yes = "Yes"
     label_smoker_no = "No"
+    coin_name = "USD"
 else:
     file_name = 'insurance_brasil_simulado'
     label_sex_male = "Masculino"
     label_sex_female = "Feminino"
     label_smoker_yes = "Sim"
     label_smoker_no = "Não"
+    coin_name = "BRL"
 
 df = pd.read_csv(f'database/{file_name}.csv')
 print(df.head())
@@ -159,7 +161,7 @@ r2_linearRegression = r2_score(y_test, y_pred)
 
 print("---- Avalia o modelo de Regressão Linear")
 print(f"MSE: {mse_linearRegression}")
-print(f"MAE: R$ {round(mae_linearRegression, 2)}")
+print(f"MAE: {coin_name} {round(mae_linearRegression, 2)}")
 print(f"R2: {r2_linearRegression}")
 
 # Cria e treina o modelo de árvore de decisão
@@ -174,7 +176,7 @@ r2_decisionTree = r2_score(y_test, y_pred_decisionTree)
 
 print("---- Avalia o modelo de Árvore de Decisão")
 print(f"MSE: {mse_decisionTree}")
-print(f"MAE: R$ {round(mae_decisionTree, 2)}")
+print(f"MAE: {coin_name} {round(mae_decisionTree, 2)}")
 print(f"R2: {r2_decisionTree}")
 
 # Cria e treina o modelo de Random Forest
@@ -189,7 +191,7 @@ r2_randomForest = r2_score(y_test, y_pred_randomForest)
 
 print("---- Avalia o modelo de Random Forest")
 print(f"MSE: {mse_randomForest}")
-print(f"MAE: R$ {round(mae_randomForest, 2)}")
+print(f"MAE: {coin_name} {round(mae_randomForest, 2)}")
 print(f"R2: {r2_randomForest}")
 
 # Faz validação cruzada para comparar os modelos
@@ -213,7 +215,7 @@ r2_test_mean = [np.mean(scores_linearRegression), np.mean(scores_decisionTree), 
 
 df_results = pd.DataFrame({
     'Modelo': modal_names,
-    'R2 (teste unico)': [round(x, 4) for x in r2_test],
+    'R2 (teste único)': [round(x, 4) for x in r2_test],
     'R2 (teste cruzado)': [round(x, 4) for x in r2_test_mean],
     'Desvio padrão': [round(x, 4) for x in r2_test_std]
 })
