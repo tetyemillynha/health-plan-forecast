@@ -121,16 +121,6 @@ plt.ylabel('Encargos')
 plt.savefig(f'graphs/encargos_por_fumante_{language}.png', bbox_inches='tight')
 plt.close()
 
-# Gráfico de dispersão - Encargos vs IMC por Status de Fumante
-plt.figure(figsize=(10, 6))
-sns.scatterplot(x='bmi', y='charges', hue='smoker', data=df)
-plt.title(f'Encargos vs IMC por Status de Fumante - {language}')
-plt.xlabel('IMC')
-plt.ylabel('Encargos')
-plt.tight_layout()
-plt.savefig(f'graphs/imc_vs_encargos_fumante_{language}.png')
-plt.close()
-
 #Pré processamento dos dados
 print("---- Pré processamento dos dados")
 #padroniza os valores para fumante e sexo e idade
@@ -231,7 +221,6 @@ df_results = pd.DataFrame({
 print("---- Resultados dos modelos")
 print(df_results.to_string(index=False));
 df_results.to_csv(f'results/results_modelos_{language}.csv', index=False)
-
 
 
 # Gráfico de barras - R²
