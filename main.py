@@ -12,22 +12,34 @@ from sklearn.model_selection import KFold, cross_val_score
 
 os.makedirs('graphs', exist_ok=True)
 
-# Carregue a base de dados e explore suas características;
-df = pd.read_csv('database/insurance_brasil_simulado.csv')
+language = "en"
+
+if language == "en":
+    file_name = 'insurance_international'
+    label_sex_male = "Male"
+    label_sex_female = "Female"
+    label_smoker_yes = "Yes"
+    label_smoker_no = "No"
+else:
+    file_name = 'insurance_brasil_simulado'
+    label_sex_male = "Masculino"
+    label_sex_female = "Feminino"
+    label_smoker_yes = "Sim"
+    label_smoker_no = "Não"
+
+df = pd.read_csv(f'database/{file_name}.csv')
 print(df.head())
 
 
 # Analise estatísticas descritivas e visualize distribuições relevantes.
 df.head()
 df.describe()
-# print(df.info());
-# print(df.describe());
 
 # Analisando os valores nulos de cada coluna (numericas)
 print(df.isnull().sum());
 
 # Analisando os valores únicos de cada coluna (categoricas)
-for column in ['sexo', 'fumante', 'regiao']:
+for column in ['sex', 'smoker', 'region']:
     # print(df[column].value_counts())
     print(f"Valores únicos da coluna {column}: {df[column].unique()}")
 
@@ -38,44 +50,44 @@ df.isnull().sum()
 # Vizualização de distribuições relevantes.
 # Distribuição por região
 print("---- Distribuição por região")
-print(df.groupby('regiao')['encargos'].describe())
+print(df.groupby('region')['charges'].describe())
 
 # Distribuição por sexo
 print("---- Distribuição por sexo")
-print(df.groupby('sexo')['encargos'].describe())
+print(df.groupby('sex')['charges'].describe())
 
 # Distribuição por fumante
 print("---- Distribuição por fumante")
-print(df.groupby('fumante')['encargos'].describe())
+print(df.groupby('smoker')['charges'].describe())
 
 #Distribuição por sexo / fumante
 print("---- Distribuição por sexo / fumante")
-print(df.groupby(['sexo', 'fumante'])['encargos'].describe())
+print(df.groupby(['sex', 'smoker'])['charges'].describe())
 
 #Distribuição por sexo / regiao
 print("---- Distribuição por sexo / regiao")
-print(df.groupby(['sexo', 'regiao'])['encargos'].describe())
+print(df.groupby(['sex', 'region'])['charges'].describe())
 
 #Distribuição por idade / regiao
 print("---- Distribuição por idade / regiao")
-print(df.groupby(['idade', 'regiao'])['encargos'].describe())
+print(df.groupby(['age', 'region'])['charges'].describe())
 
 
 #medias e contagens para todas as colunas
-print(df.groupby('regiao').agg(
-    media_encargos=('encargos', 'mean'),
-    mediana_encargos=('encargos', 'median'),
-    contagem=('encargos', 'count')
+print(df.groupby('region').agg(
+    media_charges=('charges', 'mean'),
+    mediana_charges=('charges', 'median'),
+    contagem=('charges', 'count')
 ))
-print(df.groupby('fumante').agg(
-    media_imc=('imc', 'mean'),
-    media_encargos=('encargos', 'mean'),
-    contagem=('encargos', 'count')
+print(df.groupby('smoker').agg(
+    media_charges=('charges', 'mean'),
+    mediana_charges=('charges', 'median'),
+    contagem=('charges', 'count')
 ))
-print(df.groupby('sexo').agg(
-    media_imc=('imc', 'mean'),
-    media_encargos=('encargos', 'mean'),
-    contagem=('encargos', 'count')
+print(df.groupby('sex').agg(
+    media_charges=('charges', 'mean'),
+    mediana_charges=('charges', 'median'),
+    contagem=('charges', 'count')
 ))
 
 # Percebe-se até aqui que os encargos são maiores para os fumantes e para as mulheres
@@ -84,66 +96,65 @@ print(df.groupby('sexo').agg(
 #Geração de gráficos para melhor visualização dos dados
 # Encargos por região
 plt.figure(figsize=(10, 6))
-sns.barplot(x='regiao', y='encargos', hue='regiao', data=df) #barras
-plt.title('Encargos por Região')
+sns.barplot(x='region', y='charges', hue='region', data=df) #barras
+plt.title(f'Encargos por Região - {language}')
 plt.xlabel('Região')
 plt.ylabel('Encargos')
-plt.savefig('graphs/encargos_por_regiao.png', bbox_inches='tight')
+plt.savefig(f'graphs/encargos_por_regiao_{language}.png', bbox_inches='tight')
 plt.close()
 
 # Encargos por sexo
 plt.figure(figsize=(10, 6))
-sns.barplot(x='sexo', y='encargos', hue='sexo', data=df)
-plt.title('Encargos por Sexo')
+sns.barplot(x='sex', y='charges', hue='sex', data=df)
+plt.title(f'Encargos por Sexo - {language}')
 plt.xlabel('Sexo')
 plt.ylabel('Encargos')
-plt.savefig('graphs/encargos_por_sexo.png', bbox_inches='tight')
+plt.savefig(f'graphs/encargos_por_sexo_{language}.png', bbox_inches='tight')
 plt.close()
 
 # Encargos por fumante
 plt.figure(figsize=(10, 6))
-sns.barplot(x='fumante', y='encargos', hue='fumante', data=df)
-plt.title('Encargos por Fumante')
+sns.barplot(x='smoker', y='charges', hue='smoker', data=df)
+plt.title(f'Encargos por Fumante - {language}')
 plt.xlabel('Fumante')
 plt.ylabel('Encargos')
-plt.savefig('graphs/encargos_por_fumante.png', bbox_inches='tight')
+plt.savefig(f'graphs/encargos_por_fumante_{language}.png', bbox_inches='tight')
 plt.close()
 
 # Gráfico de dispersão - Encargos vs IMC por Status de Fumante
 plt.figure(figsize=(10, 6))
-sns.scatterplot(x='imc', y='encargos', hue='fumante', data=df)
-plt.title('Encargos vs IMC por Status de Fumante')
+sns.scatterplot(x='bmi', y='charges', hue='smoker', data=df)
+plt.title(f'Encargos vs IMC por Status de Fumante - {language}')
 plt.xlabel('IMC')
 plt.ylabel('Encargos')
 plt.tight_layout()
-plt.savefig('graphs/imc_vs_encargos_fumante.png')
+plt.savefig(f'graphs/imc_vs_encargos_fumante_{language}.png')
 plt.close()
 
 #Pré processamento dos dados
 print("---- Pré processamento dos dados")
-
 #padroniza os valores para fumante e sexo e idade
-df['fumante'] = df['fumante'].str.strip().str.capitalize()
-df['sexo'] = df['sexo'].str.strip().str.capitalize()
-df['idade'] = pd.to_numeric(df['idade'], errors='coerce')
+df['smoker'] = df['smoker'].str.strip().str.capitalize()
+df['sex'] = df['sex'].str.strip().str.capitalize()
+df['age'] = pd.to_numeric(df['age'], errors='coerce')
 
 # Remove os dados inválidos
 df = df.dropna()
-df = df[df['sexo'].isin(['Masculino', 'Feminino'])]
-df = df[df['fumante'].isin(['Sim', 'Não'])]
-df = df[(df['idade'] >= 0) & (df['idade'] <= 130)]
-df = df[(df['imc'] >= 10) & (df['imc'] <= 60)]
+df = df[df['sex'].isin([label_sex_male, label_sex_female])]
+df = df[df['smoker'].isin([label_smoker_yes, label_smoker_no])]
+df = df[(df['age'] >= 0) & (df['age'] <= 130)]
+df = df[(df['bmi'] >= 10) & (df['bmi'] <= 60)]
 
 print(df.head())
 
 # Converta variáveis categóricas em formatos numéricos adequados para modelagem
 print("---- Converta variáveis categóricas em formatos numéricos adequados para modelagem")
-df_encoded = pd.get_dummies(df, columns=['sexo', 'fumante', 'regiao'], drop_first=True) #prevenindo multicolinearidade
+df_encoded = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True) #prevenindo multicolinearidade
 
-X = df_encoded.drop('encargos', axis=1)
-y = df_encoded['encargos']
+X = df_encoded.drop('charges', axis=1)
+y = df_encoded['charges']
 
-# Divide os dados em conjuntos de treinamento e teste (80 / 20)
+# Divide os dados em conjuntos de treinamento e teste (80 / 20) - sklearn
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Cria e treina o modelo de regressão linear
@@ -219,7 +230,7 @@ df_results = pd.DataFrame({
 
 print("---- Resultados dos modelos")
 print(df_results.to_string(index=False));
-df_results.to_csv('results/results_modelos.csv', index=False)
+df_results.to_csv(f'results/results_modelos_{language}.csv', index=False)
 
 
 
@@ -234,13 +245,13 @@ width = 0.35
 plt.figure(figsize=(10, 6))
 plt.bar(x - width/2, r2_teste, width, label='Teste')
 plt.bar(x + width/2, r2_cv, width, label='Validação Cruzada')
-plt.ylim(0.95, 1.01)
+# plt.ylim(0.95, 1.01)
 plt.ylabel('R²')
-plt.title('Comparação do R² dos Modelos')
+plt.title(f'Comparação do R² dos Modelos - {language}')
 plt.xticks(x, model_names)
 plt.legend()
 plt.tight_layout()
-plt.savefig('graphs/r2_comparacao_modelos.png')
+plt.savefig(f'graphs/r2_comparacao_modelos_{language}.png')
 plt.close()
 
 
@@ -251,15 +262,15 @@ def plot_real_vs_previsto(y_test, y_pred, nome_modelo, filename):
     plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()], 'r--')
     plt.xlabel('Valor Real')
     plt.ylabel('Valor Previsto')
-    plt.title(f'Real vs Previsto - {nome_modelo}')
+    plt.title(f'Real vs Previsto - {nome_modelo} - {language}')
     plt.tight_layout()
     plt.savefig(f'graphs/{filename}')
     plt.close()
 
 # Aplica para cada modelo
-plot_real_vs_previsto(y_test, y_pred, "Regressão Linear", "real_vs_previsto_lr.png")
-plot_real_vs_previsto(y_test, y_pred_decisionTree, "Árvore de Decisão", "real_vs_previsto_dt.png")
-plot_real_vs_previsto(y_test, y_pred_randomForest, "Random Forest", "real_vs_previsto_rf.png")
+plot_real_vs_previsto(y_test, y_pred, "Regressão Linear", f"real_vs_previsto_lr_{language}.png")
+plot_real_vs_previsto(y_test, y_pred_decisionTree, "Árvore de Decisão", f"real_vs_previsto_dt_{language}.png")
+plot_real_vs_previsto(y_test, y_pred_randomForest, "Random Forest", f"real_vs_previsto_rf_{language}.png")
 
 
 

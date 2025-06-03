@@ -1,4 +1,4 @@
-idade,sexo,imc,filhos,fumante,regiao,encargos
+age,sex,bmi,children,smoker,region,charges
 56,Masculino,22.3,4,Não,Nordeste,2420.1
 46,Feminino,24.9,1,Sim,Nordeste,6540.3
 32,Feminino,29.4,0,Não,Sudeste,2426.4
