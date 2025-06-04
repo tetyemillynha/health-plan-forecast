@@ -236,7 +236,6 @@ width = 0.35
 plt.figure(figsize=(10, 6))
 plt.bar(x - width/2, r2_teste, width, label='Teste')
 plt.bar(x + width/2, r2_cv, width, label='Validação Cruzada')
-# plt.ylim(0.95, 1.01)
 plt.ylabel('R²')
 plt.title(f'Comparação do R² dos Modelos - {language}')
 plt.xticks(x, model_names)
