@@ -28,7 +28,7 @@ Foram implementados e avaliados três modelos preditivos:
 .
 ├── database/
 │   └── insurance_brasil_simulado.csv   # Base de dados simulada
-│   └── insurance_brasil_simulado.csv   # Base de dados simulada
+│   └── insurance_international.csv   # Base de internacional (Kaggle)
 ├── graphs/
 │   ├── encargos_por_fumante.png
 │   ├── encargos_por_regiao.png
