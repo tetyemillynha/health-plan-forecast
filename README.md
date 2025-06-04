@@ -87,11 +87,5 @@ Os gráficos gerados serão salvos na pasta `graphs/` e os resultados comparativ
 
 ## Autor
 
-* \[Seu Nome]
-* Projeto acadêmico de Machine Learning
-
----
-
-Se quiser, eu posso agora gerar o arquivo `README.md` já prontinho pra você só copiar e colar no seu projeto — inclusive adaptando o link do repositório e o seu nome, se me informar.
-
-Quer? 🚀
+* Stefhany Santos
+* Projeto acadêmico de Machine Learning - FIAP
